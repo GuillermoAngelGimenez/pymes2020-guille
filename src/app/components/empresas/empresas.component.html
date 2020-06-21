@@ -1,0 +1,98 @@
+<div class="container">
+  <div *ngIf="AccionABMC=='L'">
+	<h3>{{Titulo}}</h3>
+
+	<div>
+		<table class="table table-bordered table-striped">
+			<thead>
+				<tr>
+					<th class="text-center">Razon Social</th>
+					<th class="text-center">Fecha de Fundacion</th>
+					<th class="text-center">Cantidad de Empleados</th>
+          <th class="text-center">Acción</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let item of Items">
+					<td>{{ item.RazonSocial }}</td>
+					<td>{{ item.FechaFundacion| date:'dd/MM/yyyy' }}</td>
+					<td>{{ item.CantidadEmpleados }}</td>
+					<td class="text-center text-nowrap">
+						<button type="button" class="btn btn-sm btn-outline-primary" title="Editar" (click)="Editar(item)">
+              <span class="fas fa-pencil-alt"></span>
+            </button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+</div>
+
+  <!-- <div class="container"> -->
+<!-- Registro en Alta,Modificacion o Consulta -->
+<div class="container-fluid">
+<form name='FormReg' [formGroup]='FormReg' class="bg-light" *ngIf="AccionABMC != 'L'">
+  <p><b> {{ Estado }} de Empresas </b></p>
+
+  <fieldset> 
+    <!--campo razon social-->
+    <div class="row form-group">
+      <label class="col-form-label col-sm-3 col-sm-offset-2 text-right" for="RazonSocial">
+        Razon Social <!-- <span class="text-danger">*</span> -->
+      </label>
+      <div class="col-sm-4">
+        <input type="text" class="form-control" formControlName="RazonSocial" />
+  <!--       <span class="text-danger" *ngIf="(FormReg.controls.Precio.touched || submitted) 
+        && FormReg.controls.Precio.errors?.pattern">
+          Dato requerido.
+        </span> -->
+      </div>
+    </div>
+
+    <!--campo fecha de fundacion-->
+    <div class="form-group row">
+      <label class="col-form-label col-sm-3 col-sm-offset-2 text-right" for="FechaFundacion">
+        Fecha de Fundacion <!-- <span class="text-danger">*</span> -->
+      </label>
+      <div class="col-sm-4">
+        <input type="text" class="form-control" formControlName="FechaFundacion" />
+    <!--     <span class="text-danger" *ngIf="(FormReg.controls.Stock.touched || submitted) 
+        && FormReg.controls.Stock.errors?.pattern">
+          Dato numérico, 1 a 7 dígitos.
+        </span> -->
+      </div>
+    </div>
+    
+
+    <!--campo cantidad de empleados-->
+    <div class="form-group row">
+      <label class="col-form-label col-sm-3 col-sm-offset-2 text-right" for="CantidadEmpleados">
+        Cantidad de Empleados<!-- <span class="text-danger">*</span> -->
+      </label>
+      <div class="col-sm-4">
+        <input type="text" formControlName="CantidadEmpleados" class="form-control" />
+<!--         <span class="text-danger" *ngIf="(FormReg.controls.CodigoDeBarra.touched || submitted) 
+      && FormReg.controls.CodigoDeBarra.errors?.pattern">
+          Dato requerido.
+        </span> -->
+      </div>
+    </div>
+
+  <!-- Botones Grabar, Cancelar/Volver' -->
+  <div class="row justify-content-center">
+    <button type="button" class="btn btn-primary" (click)="Grabar()">
+      <span class="fas fa-check"></span> Aceptar
+    </button>
+    &nbsp;
+    <button type="button" class="btn btn-warning" (click)="Volver()">
+      <span class="fas fa-undo"></span> Cancelar
+    </button>
+  </div>
+
+</fieldset>
+</form>
+
+</div>
+
+
