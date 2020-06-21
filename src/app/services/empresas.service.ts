@@ -34,8 +34,8 @@ export class EmpresasService {
     return this.httpClient.put(this.resourceUrl + Id, obj);
   }
 
-  delete(Id) {
+ /*  delete(Id) {
     return this.httpClient.delete(this.resourceUrl + Id);
-  }
+  } */
   
   }
