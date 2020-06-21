@@ -26,17 +26,23 @@ export class EmpresasComponent implements OnInit {
     this.GetEmpresas();
 
     this.FormReg = this.formBuilder.group({
-      CantidadEmpleados: [null],
-      FechaFundacion: [null],
-      /* IdEmpresa: [null], */
-      RazonSocial: [null]
+      CantidadEmpleados: ["", [Validators.required, Validators.pattern("[0-9]{1,7}")]],
+      FechaFundacion: ["", [Validators.required, Validators.pattern(
+            "(0[1-9]|[12][0-9]|3[01])[-/](0[1-9]|1[012])[-/](19|20)[0-9]{2}"
+          )
+        ]
+      ],
+      IdEmpresa: [0],
+      RazonSocial: ["", [Validators.required, Validators.minLength(5), Validators.maxLength(30)]],
+      
+      /* Activo: [true] */
     });
   }
 
   GetEmpresas() {
     this.empresasService.get().subscribe((res: any) => {
-        this.Items = res;
-      });
+      this.Items = res;
+    });
   }
 
   Editar(item) {
@@ -48,16 +54,14 @@ export class EmpresasComponent implements OnInit {
   BuscarPorId(item) {
     /* window.scroll(0, 0); */ // ir al incio del scroll
     this.empresasService.getById(item.IdEmpresa).subscribe((res: any) => {
-      
       const itemCopy = { ...res }; // hacemos copia para no modificar el array original del mock
 
       //formatear fecha de  ISO 8061 a string dd/MM/yyyy
       var arrFecha = itemCopy.FechaFundacion.substr(0, 10).split("-");
-      itemCopy.FechaFundacion = arrFecha[2] + "/" + arrFecha[1] + "/" + arrFecha[0];
+      itemCopy.FechaFundacion =
+        arrFecha[2] + "/" + arrFecha[1] + "/" + arrFecha[0];
       this.FormReg.patchValue(itemCopy);
-
     });
-    
   }
 
   // Volver desde Agregar/Modificar
@@ -69,7 +73,7 @@ export class EmpresasComponent implements OnInit {
   Grabar() {
     /* this.submitted = true; */
     // verificar que los validadores esten OK
-     if (this.FormReg.invalid) {
+    if (this.FormReg.invalid) {
       return;
     }
 
@@ -79,31 +83,28 @@ export class EmpresasComponent implements OnInit {
     //convertir fecha de string dd/MM/yyyy a ISO para que la entienda webapi
     var arrFecha = itemCopy.FechaFundacion.substr(0, 10).split("/");
     if (arrFecha.length == 3)
-      itemCopy.FechaFundacion = 
-          new Date(
-            arrFecha[2],
-            arrFecha[1] - 1,
-            arrFecha[0]
-          ).toISOString();
+      itemCopy.FechaFundacion = new Date(
+        arrFecha[2],
+        arrFecha[1] - 1,
+        arrFecha[0]
+      ).toISOString();
 
     // agregar post
     if (itemCopy.IdEmpresa == 0 || itemCopy.IdEmpresa == null) {
       this.empresasService.post(itemCopy).subscribe((res: any) => {
         this.Volver();
         /* this.modalDialogService.Alert('Registro agregado correctamente.'); */
-        //this.Buscar();---------------------------
+        this.Volver();
         this.GetEmpresas();
       });
     } else {
       // modificar put
-      this.empresasService.put(itemCopy.IdEmpresa, itemCopy).subscribe((res: any) => {
+      this.empresasService
+        .put(itemCopy.IdEmpresa, itemCopy)
+        .subscribe((res: any) => {
           this.Volver();
           this.GetEmpresas();
         });
     }
-
-
   }
-
-
 }

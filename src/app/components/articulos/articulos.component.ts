@@ -66,6 +66,7 @@ export class ArticulosComponent implements OnInit {
         "",
         [Validators.required, Validators.minLength(4), Validators.maxLength(55)]
       ],
+      
       Precio: [null, [Validators.required, Validators.pattern("[0-9]{1,7}")]],
       Stock: [null, [Validators.required, Validators.pattern("[0-9]{1,7}")]],
       CodigoDeBarra: [
